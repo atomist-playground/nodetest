@@ -14,7 +14,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3
       with:
-        images: '{{ github.event.repository.owner }}/{{ github.event.repository.name }}'
+        images: ${{env.GITHUB_REPOSITORY}}
         tags: |
             type=ref,event=branch
             type=ref,event=tag
