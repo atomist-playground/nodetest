@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "nodemailer": "6.4.0",
-    "lodash": "4.17.20",
+    "lodash": "^4.17.20",
     "jsrsasign": "^6.0.0"
   }
 }
