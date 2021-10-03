@@ -32,6 +32,6 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
           org.opencontainers.image.source=Dockerfile
     - name: Scan
-      uses: atomist-playground/scan-action@c36c37796b6630b855ce3350bae82a17b1d1222e
+      uses: atomist-playground/scan-action@main
       with:
         image: 'ghcr.io/atomist-playground/nodetest:main'
