@@ -1,3 +1,4 @@
+# Only one from line
 FROM node:14-buster-slim
 
 WORKDIR /app
@@ -8,6 +9,3 @@ COPY index.js .
 RUN npm install
 
 CMD ["node", "index.js"]
-
-
-
