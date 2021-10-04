@@ -28,12 +28,8 @@ jobs:
         push: true
         file: ./Dockerfile
         tags: ${{ steps.meta.outputs.tags }}
-        labels: |
-          org.opencontainers.image.revision=${{ github.sha }}
-          org.opencontainers.image.source=Dockerfile
     - name: Scan
       uses: atomist-playground/scan-action@main
       with:
-        image: 'ghcr.io/atomist-playground/nodetest:main'
         tags: ${{ steps.meta.outputs.tags }}
         url: 'https://webhook.atomist.com/atomist/resource/9f330025-f3c0-4574-a26d-6ccf8d640a91'
