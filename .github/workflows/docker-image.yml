@@ -35,3 +35,4 @@ jobs:
       uses: atomist-playground/scan-action@main
       with:
         image: 'ghcr.io/atomist-playground/nodetest:main'
+        url: 'https://webhook.atomist.com/atomist/resource/a781437a-254b-4fcc-9c46-807cb5e6c978'
