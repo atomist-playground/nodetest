@@ -4,41 +4,66 @@ on: [push]
 
 jobs:
 
-  build:
+  docker-build:
+    
+    env:
+      docker_username: ${{ secrets.docker_username }}
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set Docker image name
+    - name: Set Docker Repository name (DockerHub version)
+      if: ${{ env.docker_username }}
+      shell: bash
+      run: echo "IMAGE=${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY || github.event.repository.name }}" >> $GITHUB_ENV
+      id: set_repo_if_dockerhub   
+
+    - name: Set Docker Repository name (GHCR version)
+      if: ${{ ! env.docker_username }}
+      shell: bash
       run: echo "IMAGE=ghcr.io/${{ github.repository }}" >> $GITHUB_ENV
+      id: set_repo_if_ghcr   
+
+    - name: Log in to Docker Hub
+      # TODO: should we switch this from DOCKER to DOCKERHUB now?
+      if: ${{ env.docker_username }}
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Log in to GHCR
       uses: docker/login-action@v1
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
+        # is automatically installed after enabling action: 
+        # see https://docs.github.com/en/actions/security-guides/automatic-token-authentication
         password: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Docker meta
+
+    - name: Extract metadata for new Docker Image
       id: meta
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.IMAGE }}
+        labels: |
+          com.atomist.containers.image.dockerfile=Dockerfile
         tags: |
-            type=ref,event=branch
-            type=ref,event=tag
-            type=ref,event=pr
-            type=sha
-    
-    - name: Push
+          type=ref,event=branch
+          type=ref,event=tag
+          type=ref,event=pr
+
+    - name: Push to Docker Registry
       uses: docker/build-push-action@v2
       with:
         context: ./
         push: true
         file: ./Dockerfile
         tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
     
     #- name: Scan
     #  uses: atomist-playground/scan-action@main
