@@ -1,5 +1,5 @@
 # test
-FROM node:16-buster-slim@sha256:f527a6118422b888c35162e0a7e2fb2febced4c85a23d96e1342f9edc2789fec
+FROM node:16-buster-slim@sha256:239e68151bd924a1b56ff54e60ba41aa68438f422337e1cca2ae21d11b2c1a65
 
 WORKDIR /app
 
